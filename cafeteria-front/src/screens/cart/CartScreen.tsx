@@ -77,7 +77,7 @@ const CartScreen = () => {
                 </AppText>
               )}
               <AppText variant="bold" style={styles.itemPrecio}>
-                ${item.precio.toFixed(2)}
+                ${(item.precio + item.extras.reduce((a, e) => a + e.precio, 0)).toFixed(2)}
               </AppText>
             </View>
 

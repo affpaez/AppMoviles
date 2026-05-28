@@ -6,3 +6,5 @@ CafetaUABC/
 /generated/prisma
 *.log
 .DS_Store
+*.md
+!README.md

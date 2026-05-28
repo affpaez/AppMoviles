@@ -54,3 +54,33 @@ export interface ItemCarrito {
   comentario: string
   extras: Extra[]
 }
+
+export interface Tarjeta {
+  id: string
+  usuarioId: string
+  ultimosDigitos: string
+  nombreTitular: string
+  fechaExp: string
+  marca?: string
+  pagoPorDefecto: boolean
+  creadoEn: string
+}
+
+export interface Pago {
+  id: string
+  pedidoId: string
+  monto: number
+  estado: 'PENDIENTE' | 'PAGADO' | 'FALLIDO'
+  metodoPago?: 'EFECTIVO' | 'TARJETA'
+  tarjetaId?: string
+  codigo?: string
+  pagadoEn?: string
+}
+
+export interface Descuento {
+  id: string
+  codigo: string
+  porcentaje: number
+  activo: boolean
+  fechaExpiracion?: string
+}

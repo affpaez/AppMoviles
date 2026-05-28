@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { Usuario } from '../types/types'
+import { useCartStore } from './cartStore'
 
 interface AuthState {
   usuario: Usuario | null
@@ -11,6 +12,12 @@ interface AuthState {
 export const useAuthStore = create<AuthState>((set) => ({
   usuario: null,
   token: null,
-  setAuth: (usuario, token) => set({ usuario, token }),
-  cerrarSesion: () => set({ usuario: null, token: null }),
+  setAuth: (usuario, token) => {
+    useCartStore.getState().limpiarCarrito()
+    set({ usuario, token })
+  },
+  cerrarSesion: () => {
+    useCartStore.getState().limpiarCarrito()
+    set({ usuario: null, token: null })
+  },
 }))

@@ -1,5 +1,5 @@
-import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, View, ScrollView, Image } from 'react-native'
+import React from 'react'
 import { Ionicons } from '@expo/vector-icons'
 import AppSaveView from '../../components/views/AppSaveView'
 import AppText from '../../components/text/AppText'
@@ -15,10 +15,10 @@ const OrderStatusScreen = () => {
   const route = useRoute<any>()
   const { pedido } = route.params
   const { limpiarCarrito } = useCartStore()
-  const [resumenVisible, setResumenVisible] = useState(false)
   const esListo = pedido.estado === 'LISTO'
   const subtotal = pedido.subtotal || 0
   const iva = pedido.iva || 0
+  const propina = pedido.propina || 0
   const total = pedido.total || 0
 
   const handleSalir = () => {
@@ -28,19 +28,6 @@ const OrderStatusScreen = () => {
 
   return (
     <AppSaveView style={styles.container}>
-      <View style={styles.header}>
-        <TouchableOpacity style={styles.backButton}>
-          <Ionicons name="arrow-back" size={s(22)} color="#6B7280" />
-        </TouchableOpacity>
-        <View>
-          <AppText style={styles.headerSub}>Sauzal</AppText>
-          <AppText variant="bold" style={styles.headerTitle}>Tu orden del pedido</AppText>
-        </View>
-        <TouchableOpacity>
-          <Ionicons name="menu-outline" size={s(28)} color="#6B7280" />
-        </TouchableOpacity>
-      </View>
-
       <ScrollView>
         <View style={styles.statusCard}>
           {esListo ? (
@@ -64,51 +51,45 @@ const OrderStatusScreen = () => {
                 <View style={[styles.orbitDot, { top: '25%', right: '15%' }]} />
                 <View style={[styles.orbitDot, { top: '15%', left: '5%' }]} />
                 <View style={[styles.orbitDot, { bottom: '25%', right: '10%', backgroundColor: '#FEF3C7' }]} />
-                <Ionicons name="time-outline" size={s(60)} color="#2D3142" style={styles.orbitIcon} />
+                <Image source={require('../../../assets/cimarron-like.png')} style={styles.orbitIcon} />
               </View>
             </>
           )}
         </View>
 
         <View style={styles.detailsCard}>
-          <TouchableOpacity
-            style={styles.accordionHeader}
-            onPress={() => setResumenVisible(!resumenVisible)}
-          >
-            <AppText style={styles.accordionTitle}>Lista de orden y precios</AppText>
-            <Ionicons
-              name={resumenVisible ? 'chevron-up' : 'chevron-down'}
-              size={s(20)}
-              color="#FFC107"
-            />
-          </TouchableOpacity>
+          <AppText variant="bold" style={styles.detailsTitle}>Resumen de tu orden</AppText>
 
-          {resumenVisible && (
-            <>
-              {pedido.items?.map((item: any) => (
-                <View key={item.id} style={styles.itemRow}>
-                  <View style={styles.itemCircle}>
-                    <Ionicons name="fast-food-outline" size={s(18)} color={AppColors.medGray} />
-                  </View>
-                  <AppText style={styles.itemName}>{item.producto?.nombre || 'Producto'}</AppText>
-                  <AppText variant="bold" style={styles.itemPrice}>
-                    {item.cantidad} x ${item.precio?.toFixed(2)}
-                  </AppText>
-                </View>
-              ))}
-
-              <TouchableOpacity style={styles.addMore} onPress={() => navigation.navigate('Home')}>
-                <Ionicons name="add-circle-outline" size={s(18)} color="#FFC107" />
-                <AppText style={styles.addMoreText}>Agregar más opciones del menú</AppText>
-              </TouchableOpacity>
-            </>
-          )}
+          {pedido.items?.map((item: any, index: number) => (
+            <View key={item.id || index} style={styles.itemRow}>
+              <View style={styles.itemCircle}>
+                <Ionicons name="fast-food-outline" size={s(18)} color={AppColors.medGray} />
+              </View>
+              <View style={styles.itemInfo}>
+                <AppText variant="bold" style={styles.itemName}>{item.producto?.nombre || 'Producto'}</AppText>
+                {item.comentario ? <AppText style={styles.itemComment}>{item.comentario}</AppText> : null}
+                {item.extras?.length > 0 && (
+                  <AppText style={styles.itemExtras}>+ {item.extras.map((e: any) => e.extra?.nombre || e.nombre).join(', ')}</AppText>
+                )}
+              </View>
+              <View style={styles.itemPriceCol}>
+                <AppText variant="bold" style={styles.itemPrice}>${((item.precio + (item.extras?.reduce?.((a: any, e: any) => a + (e.precio || e.extra?.precio || 0), 0) ?? 0)) * item.cantidad).toFixed(2)}</AppText>
+                <AppText style={styles.itemQty}>{item.cantidad} x ${(item.precio + (item.extras?.reduce?.((a: any, e: any) => a + (e.precio || e.extra?.precio || 0), 0) ?? 0)).toFixed(2)}</AppText>
+              </View>
+            </View>
+          ))}
 
           <View style={styles.pricing}>
             <View style={styles.pricingRow}>
               <AppText style={styles.pricingLabel}>Subtotal</AppText>
               <AppText variant="bold" style={styles.pricingValue}>${subtotal.toFixed(2)}</AppText>
             </View>
+            {propina > 0 && (
+              <View style={styles.pricingRow}>
+                <AppText style={styles.pricingLabel}>Propina</AppText>
+                <AppText variant="bold" style={styles.pricingValue}>${propina.toFixed(2)}</AppText>
+              </View>
+            )}
             <View style={styles.pricingRow}>
               <AppText style={styles.pricingLabel}>IVA (8%)</AppText>
               <AppText variant="bold" style={styles.pricingValue}>${iva.toFixed(2)}</AppText>
@@ -125,7 +106,7 @@ const OrderStatusScreen = () => {
       </ScrollView>
 
       <View style={styles.footer}>
-        <AppButton title="Salir" onPress={handleSalir} />
+        <AppButton title="Continuar" onPress={handleSalir} />
       </View>
     </AppSaveView>
   )
@@ -135,98 +116,33 @@ export default OrderStatusScreen
 
 const styles = StyleSheet.create({
   container: { flex: 1, paddingHorizontal: sharedPaddingHorizontal },
-  header: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: s(12),
-    marginTop: vs(8),
-    marginBottom: vs(16),
-  },
-  backButton: {
-    width: s(44), height: s(44), borderRadius: s(12),
-    backgroundColor: AppColors.white,
-    borderWidth: 1, borderColor: '#F0F0F0',
-    alignItems: 'center', justifyContent: 'center',
-  },
-  headerSub: { fontSize: s(12), color: AppColors.medGray },
-  headerTitle: { fontSize: s(18), color: '#2D3142' },
   statusCard: {
-    backgroundColor: AppColors.white,
-    borderRadius: s(24),
-    padding: s(20),
-    alignItems: 'center',
-    marginBottom: vs(16),
-    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05, shadowRadius: 20, elevation: 4,
+    backgroundColor: AppColors.white, borderRadius: s(24), padding: s(20), alignItems: 'center', marginBottom: vs(16),
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 20, elevation: 4,
   },
   statusLabel: { fontSize: s(14), color: '#6B7280', marginBottom: vs(4) },
   statusTime: { fontSize: s(24), color: '#FBBF24', marginBottom: vs(16) },
   statusDisfruta: { fontSize: s(24), color: '#FFC107', marginBottom: vs(24) },
-  mascotContainer: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: s(160), height: s(160),
-  },
-  mascotBg: {
-    ...StyleSheet.absoluteFillObject, borderRadius: s(80),
-    backgroundColor: '#FFC107', opacity: 0.2,
-    transform: [{ scale: 0.9 }],
-  },
-  orbitContainer: {
-    height: vs(240),
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
-    overflow: 'hidden',
-  },
-  orbitCircle: {
-    position: 'absolute',
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: '#D1FAE5',
-  },
-  orbitDot: {
-    position: 'absolute',
-    width: 6, height: 6, borderRadius: 3,
-    backgroundColor: '#FBBF24',
-  },
-  orbitIcon: { zIndex: 2 },
+  mascotContainer: { alignItems: 'center', justifyContent: 'center', width: s(160), height: s(240) },
+  mascotBg: { ...StyleSheet.absoluteFillObject, borderRadius: s(80), backgroundColor: '#FFC107', opacity: 0.2, transform: [{ scale: 0.9 }] },
+  orbitContainer: { height: vs(240), width: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
+  orbitCircle: { position: 'absolute', borderRadius: 999, borderWidth: 1, borderColor: '#D1FAE5' },
+  orbitDot: { position: 'absolute', width: 6, height: 6, borderRadius: 3, backgroundColor: '#FBBF24' },
+  orbitIcon: { zIndex: 2, width: s(100), height: s(140) },
   detailsCard: {
-    backgroundColor: AppColors.white,
-    borderRadius: s(24),
-    padding: s(20),
-    marginBottom: vs(16),
-    shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.05, shadowRadius: 20, elevation: 4,
+    backgroundColor: AppColors.white, borderRadius: s(24), padding: s(20), marginBottom: vs(16),
+    shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 20, elevation: 4,
   },
-  accordionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  accordionTitle: { fontSize: s(14), color: '#6B7280' },
-  itemRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: vs(10),
-    borderBottomWidth: 1, borderBottomColor: '#F0F0F0',
-  },
-  itemCircle: {
-    width: s(40), height: s(40), borderRadius: s(20),
-    backgroundColor: '#F5F5F5',
-    alignItems: 'center', justifyContent: 'center',
-    marginRight: s(12),
-  },
-  itemName: { flex: 1, fontSize: s(13), color: '#1F2937' },
-  itemPrice: { fontSize: s(13), color: '#1F2937' },
-  addMore: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: vs(14),
-    gap: s(6),
-  },
-  addMoreText: { fontSize: s(13), color: '#FFC107', fontWeight: '700' },
+  detailsTitle: { fontSize: s(16), color: '#2D3142', marginBottom: vs(16) },
+  itemRow: { flexDirection: 'row', alignItems: 'flex-start', paddingVertical: vs(10), borderBottomWidth: 1, borderBottomColor: '#F0F0F0' },
+  itemCircle: { width: s(40), height: s(40), borderRadius: s(20), backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center', marginRight: s(12) },
+  itemInfo: { flex: 1 },
+  itemName: { fontSize: s(13), color: '#1F2937' },
+  itemComment: { fontSize: s(11), color: AppColors.medGray, marginTop: vs(2) },
+  itemExtras: { fontSize: s(11), color: AppColors.primary, marginTop: vs(2) },
+  itemPriceCol: { alignItems: 'flex-end' },
+  itemPrice: { fontSize: s(14), color: '#1F2937' },
+  itemQty: { fontSize: s(11), color: AppColors.medGray },
   pricing: { borderTopWidth: 1, borderTopColor: '#F0F0F0', paddingTop: vs(12) },
   pricingRow: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: vs(8) },
   pricingLabel: { fontSize: s(13), color: AppColors.medGray },

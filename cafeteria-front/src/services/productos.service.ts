@@ -1,16 +1,11 @@
-import axios from 'axios'
-import { API_URL } from '../constants/constants'
+import api from './api'
 
-const api = axios.create({
-  baseURL: API_URL,
-})
-
-export const obtenerProductosService = async () => {
-  const response = await api.get('/productos')
+export const obtenerProductosService = async (page = 1, limit = 20) => {
+  const response = await api.get(`/productos?page=${page}&limit=${limit}`)
   return response.data
 }
 
-export const obtenerProductoDelDiaService = async () => {
+export const obtenerProductosDelDiaService = async () => {
   const response = await api.get('/productos/producto-del-dia')
   return response.data
 }
@@ -30,7 +25,7 @@ export const buscarProductosService = async (nombre: string) => {
   return response.data
 }
 
-export const filtrarPorCategoriaService = async (categoriaId: string) => {
-  const response = await api.get(`/productos/categoria/${categoriaId}`)
+export const filtrarPorCategoriaService = async (categoriaId: string, page = 1, limit = 20) => {
+  const response = await api.get(`/productos/categoria/${categoriaId}?page=${page}&limit=${limit}`)
   return response.data
 }

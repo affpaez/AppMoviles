@@ -22,7 +22,6 @@ const ProfileScreen = () => {
   return (
     <AppSaveView style={styles.container}>
 
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.avatar}>
           <AppText variant="bold" style={styles.avatarTexto}>
@@ -36,22 +35,21 @@ const ProfileScreen = () => {
         <AppText style={styles.rol}>{usuario?.rol}</AppText>
       </View>
 
-      {/* Opciones */}
       <View style={styles.opciones}>
 
-        <TouchableOpacity style={styles.opcionItem}>
+        <TouchableOpacity style={styles.opcionItem} onPress={() => navigation.navigate('OrdersScreen')}>
           <Ionicons name="receipt-outline" size={s(22)} color={AppColors.primary} />
           <AppText style={styles.opcionTexto}>Mis pedidos</AppText>
           <Ionicons name="chevron-forward" size={s(18)} color={AppColors.medGray} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.opcionItem}>
+        <TouchableOpacity style={styles.opcionItem} onPress={() => navigation.navigate('CardsScreen')}>
           <Ionicons name="card-outline" size={s(22)} color={AppColors.primary} />
           <AppText style={styles.opcionTexto}>Mis tarjetas</AppText>
           <Ionicons name="chevron-forward" size={s(18)} color={AppColors.medGray} />
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.opcionItem}>
+        <TouchableOpacity style={styles.opcionItem} onPress={() => navigation.navigate('EditProfileScreen')}>
           <Ionicons name="person-outline" size={s(22)} color={AppColors.primary} />
           <AppText style={styles.opcionTexto}>Editar perfil</AppText>
           <Ionicons name="chevron-forward" size={s(18)} color={AppColors.medGray} />
@@ -59,7 +57,6 @@ const ProfileScreen = () => {
 
       </View>
 
-      {/* Cerrar sesión */}
       <AppButton
         title="Cerrar sesión"
         onPress={handleCerrarSesion}
