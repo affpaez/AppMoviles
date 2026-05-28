@@ -1,5 +1,6 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, TouchableOpacity } from 'react-native'
 import React, { useState } from 'react'
+import { Ionicons } from '@expo/vector-icons'
 import AppSaveView from '../../components/views/AppSaveView'
 import AppText from '../../components/text/AppText'
 import AppButton from '../../components/buttons/AppButton'
@@ -18,17 +19,14 @@ const SignInScreen = () => {
 
   const [correo, setCorreo] = useState('')
   const [contrasena, setContrasena] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [cargando, setCargando] = useState(false)
 
   const handleLogin = async () => {
     if (!correo || !contrasena) {
-      showMessage({
-        message: 'Por favor llena todos los campos',
-        type: 'warning',
-      })
+      showMessage({ message: 'Por favor llena todos los campos', type: 'warning' })
       return
     }
-
     try {
       setCargando(true)
       const respuesta = await loginService({ correo, contrasena })
@@ -46,39 +44,63 @@ const SignInScreen = () => {
 
   return (
     <AppSaveView style={styles.container}>
-      <AppText variant="bold" style={styles.titulo}>
-        Hola de nuevo! ✌️
-      </AppText>
-      <AppText style={styles.subtitulo}>
-        Inicia sesión para vivir la experiencia completa.
-      </AppText>
+      <View style={styles.content}>
+        <AppText variant="bold" style={styles.titulo}>
+          Hola de nuevo! {'\u270C\uFE0F'}
+        </AppText>
+        <AppText style={styles.subtitulo}>
+          Inicia sesión para vivir la experiencia completa.
+        </AppText>
 
-      <AppTextInput
-        placeholder="Correo electrónico"
-        value={correo}
-        onChangeText={setCorreo}
-        keyboardType="email-address"
-      />
-      <AppTextInput
-        placeholder="Contraseña"
-        value={contrasena}
-        onChangeText={setContrasena}
-        secureTextEntry
-      />
+        <View style={styles.form}>
+          <View style={styles.inputContainer}>
+            <AppTextInput
+              placeholder="Correo electrónico"
+              value={correo}
+              onChangeText={setCorreo}
+              keyboardType="email-address"
+              style={styles.input}
+            />
+          </View>
 
-      <AppButton
-        title="Siguiente"
-        onPress={handleLogin}
-        disabled={cargando}
-      />
+          <View style={styles.inputContainer}>
+            <View style={styles.passwordWrapper}>
+              <AppTextInput
+                placeholder="Contraseña"
+                value={contrasena}
+                onChangeText={setContrasena}
+                secureTextEntry={!showPassword}
+                style={styles.input}
+              />
+              <TouchableOpacity
+                style={styles.eyeButton}
+                onPress={() => setShowPassword(!showPassword)}
+              >
+                <Ionicons
+                  name={showPassword ? 'eye-outline' : 'eye-off-outline'}
+                  size={s(22)}
+                  color={AppColors.medGray}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </View>
 
-      <AppButton
-        title="¿Eres nuevo? Regístrate"
-        backgroundColor="transparent"
-        textColor={AppColors.primary}
-        onPress={() => navigation.navigate('SignUpScreen')}
-        style={styles.botonRegistro}
-      />
+      <View style={styles.footer}>
+        <AppButton
+          title="Siguiente"
+          onPress={handleLogin}
+          disabled={cargando}
+        />
+        <AppButton
+          title="¿Eres nuevo? Regístrate"
+          backgroundColor="transparent"
+          textColor={AppColors.primary}
+          onPress={() => navigation.navigate('SignUpScreen')}
+          style={styles.registerButton}
+        />
+      </View>
     </AppSaveView>
   )
 }
@@ -87,22 +109,52 @@ export default SignInScreen
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
+    justifyContent: 'space-between',
+  },
+  content: {
     paddingHorizontal: sharedPaddingHorizontal,
-    justifyContent: 'center',
+    paddingTop: vs(60),
   },
   titulo: {
     fontSize: s(24),
     textAlign: 'center',
     marginBottom: vs(8),
+    color: '#313351',
   },
   subtitulo: {
-    fontSize: s(14),
+    fontSize: s(15),
     textAlign: 'center',
-    color: AppColors.medGray,
+    color: '#8C8EAC',
     lineHeight: vs(22),
-    marginBottom: vs(24),
+    marginBottom: vs(32),
+    paddingHorizontal: s(16),
   },
-  botonRegistro: {
+  form: {
+    gap: vs(16),
+  },
+  inputContainer: {},
+  input: {
+    borderRadius: s(16),
+    height: vs(56),
+    paddingHorizontal: s(20),
+  },
+  passwordWrapper: {
+    position: 'relative',
+  },
+  eyeButton: {
+    position: 'absolute',
+    right: s(16),
+    top: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    zIndex: 10,
+  },
+  footer: {
+    paddingHorizontal: sharedPaddingHorizontal,
+    paddingBottom: vs(40),
+  },
+  registerButton: {
     marginTop: vs(12),
   },
 })

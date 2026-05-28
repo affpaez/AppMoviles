@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Autenticación - Cafetería</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'brand-green': '#007042', // Starbucks-like green from the image
+            'brand-lavender': '#8E8E93', // Muted text color
+            'brand-accent': '#9B9BBA', // For the 'Registrase más tarde' link
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-typography">
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+    body {
+      font-family: 'Inter', sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+  </style>
+<style data-purpose="layout-optimizations">
+    /* Ensure the mobile view feels like a native app on the screen */
+    .mobile-container {
+      max-width: 415px;
+      min-height: 852px;
+      margin: 0 auto;
+      background-color: #fafafa;
+      position: relative;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body class="bg-gray-200 flex items-center justify-center min-h-screen">
+<!-- BEGIN: Main Mobile Container -->
+<main class="mobile-container bg-white shadow-2xl flex flex-col px-8 py-12 justify-center" data-purpose="app-shell">
+<!-- BEGIN: Status Bar Simulation -->
+<div class="absolute top-0 left-0 w-full px-8 py-4 flex justify-between items-center text-sm font-semibold text-black" data-purpose="status-bar">
+<span>9:41</span>
+<div class="flex gap-1 items-center">
+<!-- Signal strength icon -->
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M2 22h20V2z"></path></svg>
+<!-- Wifi icon -->
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24"><path d="M12 21l-12-18h24z"></path></svg>
+<!-- Battery icon -->
+<svg class="w-6 h-4" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect height="10" rx="2" width="16" x="2" y="7"></rect><path d="M22 11v2"></path></svg>
+</div>
+</div>
+<!-- END: Status Bar Simulation -->
+<!-- BEGIN: Content Section -->
+<section class="flex-grow flex flex-col items-center justify-center text-center mt-20" data-purpose="hero-content">
+<h1 class="text-[28px] font-bold text-[#33334e] mb-4">
+        Empecemos a ordenar! 😁
+      </h1>
+<p class="text-[17px] leading-relaxed text-[#7c7c94] px-4 mb-12">
+        Regístrate o inicia sesión para disfrutar de una experiencia digital completa de nuestra cafetería.
+      </p>
+<!-- BEGIN: Action Buttons -->
+<div class="w-full space-y-4" data-purpose="auth-actions">
+<!-- Login Button -->
+<button class="w-full bg-brand-green text-white py-4 rounded-xl font-semibold text-lg shadow-sm active:scale-[0.98] transition-transform" data-purpose="login-button">
+          Iniciar sesión
+        </button>
+<!-- BEGIN: Divider -->
+<div class="flex items-center justify-center py-6" data-purpose="divider">
+<div class="flex-grow border-t border-gray-200"></div>
+<div class="mx-4 w-2.5 h-2.5 border-2 border-gray-300 rounded-full"></div>
+<div class="flex-grow border-t border-gray-200"></div>
+</div>
+<!-- END: Divider -->
+<!-- Registration Button -->
+<button class="w-full bg-brand-green text-white py-4 rounded-xl font-semibold text-lg shadow-sm active:scale-[0.98] transition-transform" data-purpose="register-button">
+          Registrarse ahora
+        </button>
+</div>
+<!-- END: Action Buttons -->
+</section>
+<!-- END: Content Section -->
+<!-- BEGIN: Footer Section -->
+<footer class="mt-auto pb-10 text-center" data-purpose="footer-links">
+<a class="text-[#9B9BBA] font-medium text-[17px] hover:underline" href="#">
+        Registrase más tarde
+      </a>
+</footer>
+<!-- END: Footer Section -->
+</main>
+<!-- END: Main Mobile Container -->
+</body></html>

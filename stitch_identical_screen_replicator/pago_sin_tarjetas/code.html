@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+
+<html lang="es"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sauzal - Pago</title>
+<!-- Tailwind CSS v3 CDN -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              gold: '#FBBF24', // Yellowish color for primary actions
+              textGray: '#9CA3AF',
+              darkBlue: '#1F2937',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-styling">
+    body {
+      background-color: #F9FAFB;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* Simple custom shadow for cards */
+    .card-shadow {
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    }
+  </style>
+</head>
+<body class="flex justify-center items-start min-h-screen">
+<!-- BEGIN: MobileContainer -->
+<main class="w-full max-w-[415px] min-h-screen bg-[#FDFDFD] flex flex-col p-6 font-sans">
+<!-- BEGIN: Header -->
+<header class="flex items-center justify-between mb-8 pt-4">
+<div class="flex items-center gap-4">
+<!-- Back Button -->
+<button class="w-12 h-12 flex items-center justify-center bg-white border border-gray-100 rounded-2xl shadow-sm" data-purpose="back-button">
+<svg class="h-6 w-6 text-gray-500" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M10 19l-7-7m0 0l7-7m-7 7h18" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+<!-- Title and Subtitle -->
+<div>
+<p class="text-sm text-gray-400 font-medium">Sauzal</p>
+<h1 class="text-2xl font-bold text-slate-800">Pago</h1>
+</div>
+</div>
+<!-- Menu Button -->
+<button class="p-2" data-purpose="menu-button">
+<svg class="h-8 w-8 text-slate-800" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 8h16M4 16h16" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</button>
+</header>
+<!-- END: Header -->
+<!-- BEGIN: EmptyCardSection -->
+<section class="bg-white rounded-[32px] p-8 card-shadow flex flex-col items-center text-center mb-6" data-purpose="no-card-notification">
+<!-- Wallet Illustration -->
+<div class="mb-6">
+<!-- Replicating the wallet emoji/icon style seen in image -->
+<div class="relative w-24 h-24 flex items-center justify-center">
+<div class="absolute w-20 h-16 bg-orange-500 rounded-lg transform rotate-2"></div>
+<div class="absolute w-20 h-16 bg-orange-400 rounded-lg -rotate-1 flex items-start justify-end p-2 border-t border-orange-300">
+<div class="w-3 h-3 bg-white rounded-full opacity-60"></div>
+</div>
+<!-- Card popping out -->
+<div class="absolute -top-2 w-12 h-10 bg-sky-300 rounded-md border-2 border-white transform -translate-y-2">
+<div class="w-full h-2 bg-slate-800 mt-2"></div>
+</div>
+</div>
+</div>
+<h2 class="text-xl font-bold text-slate-800 mb-4">No tienes ninguna tarjeta</h2>
+<p class="text-gray-400 text-sm leading-relaxed mb-8 px-4">
+        Por favor agrega una tarjeta de crédito o débito para realizar tu orden
+      </p>
+<!-- Add Card Action -->
+<button class="flex items-center gap-2 text-brand-gold font-bold text-lg hover:opacity-80 transition-opacity" data-purpose="add-card-button">
+<span class="text-2xl">+</span>
+<span>Agregar tarjeta</span>
+</button>
+</section>
+<!-- END: EmptyCardSection -->
+<!-- BEGIN: OrderSummarySection -->
+<section class="bg-white rounded-[32px] p-8 card-shadow flex flex-col gap-4" data-purpose="order-summary">
+<!-- Subtotal -->
+<div class="flex justify-between items-center">
+<span class="text-gray-500 font-medium">Subtotal</span>
+<div class="flex items-start">
+<span class="text-[10px] font-bold text-gray-400 mt-1 mr-0.5">$</span>
+<span class="text-lg font-bold text-slate-800">145.00</span>
+</div>
+</div>
+<!-- IVA -->
+<div class="flex justify-between items-center">
+<span class="text-gray-500 font-medium">IVA</span>
+<div class="flex items-start">
+<span class="text-[10px] font-bold text-gray-400 mt-1 mr-0.5">$</span>
+<span class="text-lg font-bold text-slate-800">11.60</span>
+</div>
+</div>
+<hr class="border-gray-100 my-2"/>
+<!-- Discount Code Field -->
+<div class="relative mb-2">
+<div class="absolute inset-y-0 left-4 flex items-center pointer-events-none">
+<svg class="h-6 w-6 text-gray-400" fill="none" stroke="currentColor" viewbox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+<path d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</div>
+<input class="w-full pl-12 pr-4 py-4 bg-white border border-gray-100 rounded-2xl text-gray-400 placeholder-gray-400 focus:outline-none focus:ring-1 focus:ring-brand-gold focus:border-brand-gold transition-all" placeholder="Aplicar código de descuento" type="text"/>
+</div>
+<hr class="border-gray-50 my-2"/>
+<!-- Total -->
+<div class="flex justify-between items-center">
+<span class="text-xl font-bold text-slate-800">Total</span>
+<div class="flex items-start">
+<span class="text-[10px] font-bold text-brand-gold mt-1.5 mr-0.5">$</span>
+<span class="text-2xl font-black text-slate-900">156.60</span>
+</div>
+</div>
+</section>
+<!-- END: OrderSummarySection -->
+<!-- Home Indicator (iOS Style) -->
+<div class="mt-auto pt-8 pb-2 flex justify-center">
+<div class="w-32 h-1.5 bg-slate-900 rounded-full"></div>
+</div>
+</main>
+<!-- END: MobileContainer -->
+</body></html>

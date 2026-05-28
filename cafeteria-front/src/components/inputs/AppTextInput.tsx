@@ -1,15 +1,14 @@
-import { StyleSheet, Text, TextStyle, View, TextInput } from "react-native";
+import { StyleSheet, ViewStyle, TextStyle, TextInput } from "react-native";
 import React, { FC } from "react";
 import { AppColors } from "../../styles/colors";
 import { s, vs } from "react-native-size-matters";
-
 
 interface AppTextInputProps {
   value: string;
   onChangeText: (text: string) => void;
   placeholder: string;
   secureTextEntry?: boolean;
-  keyboardType?: "default" | "email-address" | "numeric";
+  keyboardType?: "default" | "email-address" | "numeric" | "phone-pad";
   style?: TextStyle;
 }
 
@@ -28,6 +27,7 @@ const AppTextInput: FC<AppTextInputProps> = ({
       placeholder={placeholder}
       secureTextEntry={secureTextEntry}
       keyboardType={keyboardType}
+      placeholderTextColor={AppColors.medGray}
       style={[styles.input, style]}
     />
   );
@@ -37,14 +37,14 @@ export default AppTextInput;
 
 const styles = StyleSheet.create({
   input: {
-    height: vs(40),
-    borderRadius: s(25),
+    height: vs(48),
+    borderRadius: s(12),
     borderWidth: 1,
-    borderColor: AppColors.borderColor,
-    paddingHorizontal: s(15),
-    fontSize: s(16),
+    borderColor: '#E5E7EB',
+    paddingHorizontal: s(16),
+    fontSize: s(14),
     backgroundColor: AppColors.white,
     width: "100%",
-    marginBottom: vs(10),
+    color: '#374151',
   },
 });

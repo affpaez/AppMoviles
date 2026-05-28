@@ -4,7 +4,7 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
-import React, { useState } from 'react'
+import React from 'react'
 import AppSaveView from '../../components/views/AppSaveView'
 import AppText from '../../components/text/AppText'
 import AppButton from '../../components/buttons/AppButton'
@@ -15,46 +15,17 @@ import { useCartStore } from '../../store/cartStore'
 import { Ionicons } from '@expo/vector-icons'
 import { useNavigation } from '@react-navigation/native'
 import { IVA } from '../../constants/constants'
-import { crearPedidoService } from '../../services/pedidos.service'
-import { useAuthStore } from '../../store/authStore'
-import { showMessage } from 'react-native-flash-message'
 
 const CartScreen = () => {
   const navigation = useNavigation<any>()
   const { items, eliminarItem, actualizarCantidad, total } = useCartStore()
 
-  const { usuario } = useAuthStore()
-  const [enviando, setEnviando] = useState(false)
-
   const subtotal = total()
   const iva = subtotal * IVA
   const totalFinal = subtotal + iva
 
-    const handleEnviarOrden = async () => {
-    try {
-      setEnviando(true)
-      const pedido = await crearPedidoService({
-        usuarioId: usuario?.id,
-        items: items.map((item) => ({
-          productoId: item.producto.id,
-          cantidad: item.cantidad,
-          precio: item.precio,
-          comentario: item.comentario,
-          extras: item.extras.map((e) => ({
-            extraId: e.id,
-            precio: e.precio,
-          })),
-        })),
-      })
-      navigation.navigate('OrderStatusScreen', { pedido })
-    } catch (error: any) {
-      showMessage({
-        message: 'Error al enviar el pedido',
-        type: 'danger',
-      })
-    } finally {
-      setEnviando(false)
-    }
+  const handleEnviarOrden = () => {
+    navigation.navigate('CheckoutNoCardScreen')
   }
 
   if (items.length === 0) {
@@ -170,9 +141,8 @@ const CartScreen = () => {
       {/* Botón enviar */}
       <View style={styles.footer}>
         <AppButton
-    title="Enviar orden →"
+    title="Ir a pagar →"
     onPress={handleEnviarOrden}
-    disabled={enviando}
   />
       </View>
 

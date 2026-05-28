@@ -3,7 +3,7 @@ import React, { FC } from 'react'
 import AppText from '../text/AppText'
 import { s, vs } from 'react-native-size-matters'
 import { AppColors } from '../../styles/colors'
-import { taxes } from '../../constants/constants'
+import { IVA } from '../../constants/constants'
 
 interface ITotalView {
   itemsPrice: number,
@@ -20,7 +20,7 @@ const TotalView : FC<ITotalView> = ({itemsPrice, orderTotal}) => {
 
       <View style={styles.row}>
         <AppText style={styles.textTitle}>IVA 8%:</AppText>
-        <AppText style={styles.textPrice}>$ {taxes}</AppText>
+        <AppText style={styles.textPrice}>$ {(itemsPrice * IVA).toFixed(2)}</AppText>
       </View>
 
       <View style={styles.separator}/>

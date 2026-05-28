@@ -2,13 +2,13 @@ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { s, vs } from "react-native-size-matters";
 import AppText from "../../components/text/AppText";
-import { AppFonts } from "../../styles/fonts";
+
 import { AppColors } from "../../styles/colors";
 import AppButton from "../../components/buttons/AppButton";
 import { useNavigation } from "@react-navigation/native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 const EmptyCart = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   return (
     <View style={styles.container}>
@@ -43,13 +43,11 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: s(20),
-    fontFamily: AppFonts.Bold,
     color: AppColors.primary,
     marginBottom: vs(10),
   },
   subTitle: {
     fontSize: s(16),
-    fontFamily: AppFonts.Medium,
     color: AppColors.medGray,
     textAlign: "center",
     marginBottom: vs(20),
