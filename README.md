@@ -22,6 +22,15 @@ El API corre en `http://localhost:3000`.
 ```bash
 cd cafeteria-front
 npm install
+```
+
+Crea un archivo `.env` en `cafeteria-front/` con tu IP local:
+
+```
+EXPO_PUBLIC_API_URL=http://TU_IP:3000
+```
+
+```bash
 npx expo start
 ```
 
