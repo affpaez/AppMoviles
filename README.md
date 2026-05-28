@@ -26,12 +26,12 @@ npm install
 
 Crea un archivo `.env` en `cafeteria-front/` con tu IP local:
 
-```
+```env
 EXPO_PUBLIC_API_URL=http://TU_IP:3000
 ```
 
 ```bash
-npx expo start
+npx expo start --clear
 ```
 
 Escanea el código QR con Expo Go en tu celular.
