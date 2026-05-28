@@ -15,7 +15,7 @@ import { DescuentosModule } from './descuentos/descuentos.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ isGlobal: true }),
+    ConfigModule.forRoot({ isGlobal: true, envFilePath: '../.env' }),
     PrismaModule,
     AuthModule,
     UsuariosModule,

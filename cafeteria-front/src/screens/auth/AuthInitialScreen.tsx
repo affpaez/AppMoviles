@@ -39,13 +39,6 @@ const AuthInitialScreen = () => {
           />
         </View>
 
-        <AppButton
-          title="Registrarse más tarde"
-          backgroundColor="transparent"
-          textColor={AppColors.medGray}
-          onPress={() => navigation.navigate('MainAppBottomTabs')}
-          style={styles.skipButton}
-        />
       </View>
     </AppSaveView>
   )

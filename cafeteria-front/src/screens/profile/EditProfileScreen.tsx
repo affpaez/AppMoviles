@@ -22,9 +22,14 @@ const EditProfileScreen = () => {
   const [showRep, setShowRep] = useState(false)
   const [cargando, setCargando] = useState(false)
 
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/
+
   const handleGuardar = async () => {
-    if (contrasena && contrasena.length < 6) {
-      showMessage({ message: 'La contraseña debe tener al menos 6 caracteres', type: 'warning' })
+    if (contrasena && !passwordRegex.test(contrasena)) {
+      showMessage({
+        message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial',
+        type: 'warning',
+      })
       return
     }
     if (contrasena !== repetirContrasena) {

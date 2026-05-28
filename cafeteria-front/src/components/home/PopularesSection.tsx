@@ -50,7 +50,7 @@ const styles = StyleSheet.create({
     shadowColor: '#000', shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.05, shadowRadius: 20, elevation: 4,
   },
-  imageContainer: { marginBottom: vs(8) },
+  imageContainer: { marginBottom: vs(8), alignItems: 'center' },
   placeholder: { width: s(80), height: s(80), borderRadius: s(40), backgroundColor: '#F5F5F5', alignItems: 'center', justifyContent: 'center' },
   image: { width: s(80), height: s(80), borderRadius: s(40) },
   nombre: { fontSize: s(12), color: '#2D3142', marginBottom: vs(4), textAlign: 'center' },

@@ -20,13 +20,39 @@ const SignUpScreen = () => {
   const [nombre, setNombre] = useState('')
   const [correo, setCorreo] = useState('')
   const [celular, setCelular] = useState('')
+  const [celularDisplay, setCelularDisplay] = useState('')
+
+  const formatCelular = (text: string) => {
+    const digits = text.replace(/\D/g, '').slice(0, 10)
+    let formatted = digits
+    if (digits.length > 6) {
+      formatted = `${digits.slice(0, 3)}-${digits.slice(3, 6)}-${digits.slice(6)}`
+    } else if (digits.length > 3) {
+      formatted = `${digits.slice(0, 3)}-${digits.slice(3)}`
+    }
+    setCelularDisplay(formatted)
+    setCelular(digits)
+  }
   const [contrasena, setContrasena] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [cargando, setCargando] = useState(false)
 
-  const handleRegistro = async () => {
-    if (!nombre || !correo || !contrasena) {
+  const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/
+
+const handleRegistro = async () => {
+    if (!nombre || !correo || !celular || !contrasena) {
       showMessage({ message: 'Por favor llena todos los campos obligatorios', type: 'warning' })
+      return
+    }
+    if (!/^\d{10}$/.test(celular)) {
+      showMessage({ message: 'El celular debe tener exactamente 10 dígitos', type: 'warning' })
+      return
+    }
+    if (!passwordRegex.test(contrasena)) {
+      showMessage({
+        message: 'La contraseña debe tener al menos 8 caracteres, una mayúscula, una minúscula, un número y un carácter especial',
+        type: 'warning',
+      })
       return
     }
     try {
@@ -74,8 +100,8 @@ const SignUpScreen = () => {
           </TouchableOpacity>
           <TextInput
             placeholder="Celular"
-            value={celular}
-            onChangeText={setCelular}
+            value={celularDisplay}
+            onChangeText={formatCelular}
             keyboardType="phone-pad"
             style={styles.phoneInput}
             placeholderTextColor={AppColors.medGray}
