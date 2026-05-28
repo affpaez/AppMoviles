@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  directUrl  = env("DIRECT_URL")
+}
+
+enum Rol {
+  ESTUDIANTE
+  ADMIN
+}
+
+enum EstadoPedido {
+  PENDIENTE
+  PREPARANDO
+  LISTO
+  ENTREGADO
+  CANCELADO
+}
+
+enum EstadoPago {
+  PENDIENTE
+  PAGADO
+  FALLIDO
+}
+
+model Usuario {
+  id         String    @id @default(uuid())
+  nombre     String
+  correo     String    @unique
+  celular    String?
+  contrasena String
+  rol        Rol       @default(ESTUDIANTE)
+  pedidos    Pedido[]
+  tarjetas   Tarjeta[]
+  creadoEn   DateTime  @default(now())
+
+  @@map("usuarios")
+}
+
+model Categoria {
+  id        String     @id @default(uuid())
+  nombre    String
+  productos Producto[]
+
+  @@map("categorias")
+}
+
+model Producto {
+  id               String        @id @default(uuid())
+  nombre           String
+  descripcion      String?
+  precio           Float
+  imagenUrl        String?
+  disponible       Boolean       @default(true)
+  esProductoDelDia Boolean       @default(false)
+  esPopular        Boolean       @default(false)
+  calorias         Int?
+  gramos           Int?
+  proteinas        Int?
+  carbohidratos    Int?
+  grasas           Int?
+  categoria        Categoria     @relation(fields: [categoriaId], references: [id])
+  categoriaId      String
+  ingredientes     Ingrediente[]
+  extras           Extra[]
+  itemsPedido      ItemPedido[]
+
+  @@map("productos")
+}
+
+model Ingrediente {
+  id         String   @id @default(uuid())
+  nombre     String
+  iconoUrl   String?
+  producto   Producto @relation(fields: [productoId], references: [id])
+  productoId String
+
+  @@map("ingredientes")
+}
+
+model Extra {
+  id         String      @id @default(uuid())
+  nombre     String
+  precio     Float
+  producto   Producto    @relation(fields: [productoId], references: [id])
+  productoId String
+  itemExtras ItemExtra[]
+
+  @@map("extras")
+}
+
+model Descuento {
+  id         String   @id @default(uuid())
+  codigo     String   @unique
+  porcentaje Float
+  activo     Boolean  @default(true)
+  pedidos    Pedido[]
+  creadoEn   DateTime @default(now())
+
+  @@map("descuentos")
+}
+
+model Pedido {
+  id             String       @id @default(uuid())
+  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
+  usuarioId      String
+  estado         EstadoPedido @default(PENDIENTE)
+  subtotal       Float
+  iva            Float
+  propina        Float        @default(0)
+  total          Float
+  tiempoEstimado Int?
+  qrToken        String?      @unique
+  descuento      Descuento?   @relation(fields: [descuentoId], references: [id])
+  descuentoId    String?
+  items          ItemPedido[]
+  pago           Pago?
+  creadoEn       DateTime     @default(now())
+
+  @@map("pedidos")
+}
+
+model ItemPedido {
+  id         String      @id @default(uuid())
+  pedido     Pedido      @relation(fields: [pedidoId], references: [id])
+  pedidoId   String
+  producto   Producto    @relation(fields: [productoId], references: [id])
+  productoId String
+  cantidad   Int
+  precio     Float
+  comentario String?
+  extras     ItemExtra[]
+
+  @@map("items_pedido")
+}
+
+model ItemExtra {
+  id           String     @id @default(uuid())
+  itemPedido   ItemPedido @relation(fields: [itemPedidoId], references: [id])
+  itemPedidoId String
+  extra        Extra      @relation(fields: [extraId], references: [id])
+  extraId      String
+  precio       Float
+
+  @@map("items_extra")
+}
+
+model Tarjeta {
+  id             String   @id @default(uuid())
+  usuario        Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId      String
+  ultimosDigitos String
+  nombreTitular  String
+  fechaExp       String
+  creadoEn       DateTime @default(now())
+
+  @@map("tarjetas")
+}
+
+model Pago {
+  id       String     @id @default(uuid())
+  pedido   Pedido     @relation(fields: [pedidoId], references: [id])
+  pedidoId String     @unique
+  monto    Float
+  estado   EstadoPago @default(PENDIENTE)
+  pagadoEn DateTime?
+
+  @@map("pagos")
+}
